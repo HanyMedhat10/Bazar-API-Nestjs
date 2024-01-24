@@ -8,10 +8,10 @@ export const dataSourceOptions: DataSourceOptions = {
   password: 'pass123',
   database: 'bazarapi',
   //   autoLoadEntities: true,
-  entities: [],
+  entities: ['dist/**/*.entity{.ts,.js}'], //meaning autoLoadEntities
   migrations: [],
   logging: false,
-  synchronize: false,
+  synchronize: true,
 };
 
 const dataSource = new DataSource(dataSourceOptions);
