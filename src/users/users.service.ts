@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,6 +12,7 @@ import { UserSignUpDto } from './dto/user-signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { sign } from 'jsonwebtoken';
+import { promises } from 'dns';
 
 @Injectable()
 export class UsersService {
@@ -60,8 +62,16 @@ export class UsersService {
       { expiresIn: '30m' },
     );
   }
-  findAll() {
-    return `This action returns all users`;
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
+  }
+  async findOne(id: number): Promise<User> {
+    // const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`This id: ${id} not found `);
+    }
+    return user;
   }
 
   async findUserByEmail(email: string) {
