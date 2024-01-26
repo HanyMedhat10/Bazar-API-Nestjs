@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { JwtModule } from '@nestjs/jwt';
+import { CurrentUserMiddleware } from './utility/middlewares/current-user.middleware';
 
 @Module({
   imports: [
@@ -24,9 +24,15 @@ import { JwtModule } from '@nestjs/jwt';
       synchronize: true,
     }),
     UsersModule,
-    JwtModule.register({ secret: 'secrete', signOptions: { expiresIn: '7d' } }),
+    // JwtModule.register({ secret: 'secrete', signOptions: { expiresIn: '7d' } }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CurrentUserMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

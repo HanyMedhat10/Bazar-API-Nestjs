@@ -12,7 +12,6 @@ import { UserSignUpDto } from './dto/user-signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { sign } from 'jsonwebtoken';
-import { promises } from 'dns';
 
 @Injectable()
 export class UsersService {
@@ -52,7 +51,8 @@ export class UsersService {
     }
 
     delete userExists.password;
-    const token = sign({ ...userExists }, 'secrete');
+    // const token = sign({ ...userExists }, 'secrete');
+    const token = this.accessToken(userExists);
     return { token, userExists };
   }
   async accessToken(user: User) {

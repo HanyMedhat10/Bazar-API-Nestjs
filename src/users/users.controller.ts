@@ -12,6 +12,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { User } from './entities/user.entity';
 import { UserLoginDto } from './dto/user-login.dto';
+import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -44,5 +45,10 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Get('me')
+  getProfile(@CurrentUser() currentUser: User) {
+    return currentUser;
   }
 }
