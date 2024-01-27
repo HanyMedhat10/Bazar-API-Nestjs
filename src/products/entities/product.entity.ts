@@ -1,30 +1,35 @@
-import { Product } from 'src/products/entities/product.entity';
+import { Category } from 'src/categories/entities/category.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'categories' })
-export class Category {
+@Entity({ name: 'products' })
+export class Product {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
   title: string;
   @Column()
   description: string;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  price: number;
+  @Column()
+  stock: number;
+  @Column('simple-array')
+  images: string[];
   @CreateDateColumn()
   createAt: Timestamp;
   @UpdateDateColumn()
   updateAt: Timestamp;
-  @ManyToOne(() => User, (user) => user.categories)
+  @ManyToOne(() => User, (user) => user.products)
   addedBy: User;
-  @OneToMany(() => Product, (product) => product.addedBy)
-  products: Product[];
+  @ManyToOne(() => Category, (cat) => cat.products)
+  category: Category;
 }
