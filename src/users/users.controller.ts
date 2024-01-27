@@ -3,19 +3,18 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UseGuards,
+  Req,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { User } from './entities/user.entity';
 import { UserLoginDto } from './dto/user-login.dto';
 import { JwtAuthGuard } from './jwt.guard';
 import { RoleGuard } from 'src/utility/common/role/role.guard';
-import { Roles } from 'src/utility/common/roles/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -40,14 +39,22 @@ export class UsersController {
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(+id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @UseGuards(JwtAuthGuard, RoleGuard) //must using token in using this method (login)
+  @Get('profile')
+  profile(@Req() req, @Res() res) {
+    // return res.status(HttpStatus.OK).json(req.user);
+    const userJson = res.status(HttpStatus.OK).json(req.user);
+    const id = req.user.userId;
+    console.log(id);
+    return userJson;
   }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  //   return this.usersService.update(+id, updateUserDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.usersService.remove(+id);
+  // }
 }

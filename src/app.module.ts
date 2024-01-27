@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './users/jwt.strategy';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { JwtStrategy } from './users/jwt.strategy';
     UsersModule,
     PassportModule,
     JwtModule.register({ secret: 'secrete', signOptions: { expiresIn: '7d' } }),
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
