@@ -1,4 +1,12 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  isEnum,
+} from 'class-validator';
+import { Role } from 'src/utility/common/user-roles-enum';
+import { isTypedArray } from 'util/types';
 
 export class UserSignUpDto {
   //   @IsNotEmpty({ message: 'Name can not be null ' })

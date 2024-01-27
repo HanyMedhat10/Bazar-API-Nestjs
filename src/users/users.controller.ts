@@ -6,12 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { User } from './entities/user.entity';
 import { UserLoginDto } from './dto/user-login.dto';
+import { JwtAuthGuard } from './jwt.guard';
+import { RoleGuard } from 'src/utility/common/role/role.guard';
+import { Roles } from 'src/utility/common/roles/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -23,14 +27,15 @@ export class UsersController {
   }
   @Post('login')
   async login(@Body() userLoginDto: UserLoginDto) {
-    return { user: await this.usersService.login(userLoginDto) };
+    return await this.usersService.login(userLoginDto);
   }
 
+  // @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
-
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(+id);

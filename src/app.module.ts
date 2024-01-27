@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './users/jwt.strategy';
 
 @Module({
   imports: [
@@ -24,9 +26,10 @@ import { JwtModule } from '@nestjs/jwt';
       synchronize: true,
     }),
     UsersModule,
+    PassportModule,
     JwtModule.register({ secret: 'secrete', signOptions: { expiresIn: '7d' } }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
 export class AppModule {}
