@@ -33,7 +33,7 @@ export class CategoriesService {
 
   async findOne(id: number): Promise<Category> {
     // return await this.categoryRepository.findOneBy({ id });
-    return await this.categoryRepository.findOne({
+    const category = await this.categoryRepository.findOne({
       where: { id },
       relations: { addedBy: true },
       select: {
@@ -44,6 +44,8 @@ export class CategoriesService {
         },
       },
     });
+    if (!category) throw new NotFoundException('Category not found.');
+    return category;
   }
 
   async update(

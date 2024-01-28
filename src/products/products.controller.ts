@@ -31,23 +31,27 @@ export class ProductsController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<Product[]> {
     return await this.productsService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Product> {
     return await this.productsService.findOne(+id);
   }
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
-  ) {
-    return await this.productsService.update(+id, updateProductDto);
+    @Req() req: any,
+  ): Promise<Product> {
+    return await this.productsService.update(+id, updateProductDto, req);
   }
 
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.productsService.remove(+id);
