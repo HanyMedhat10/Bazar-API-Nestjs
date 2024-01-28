@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './users/jwt.strategy';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProductsModule } from './products/products.module';
     JwtModule.register({ secret: 'secrete', signOptions: { expiresIn: '7d' } }),
     CategoriesModule,
     ProductsModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
