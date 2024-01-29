@@ -1,4 +1,5 @@
 import { Category } from 'src/categories/entities/category.entity';
+import { Order } from 'src/orders/entities/order.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Role } from 'src/utility/common/user-roles-enum';
@@ -34,4 +35,6 @@ export class User {
   products: Product[];
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
+  @OneToMany(() => Order, (order) => order.updatedBy)
+  ordersUpdateBy: Order[];
 }
