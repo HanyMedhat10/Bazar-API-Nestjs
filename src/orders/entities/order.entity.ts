@@ -32,14 +32,7 @@ export class Order {
   shippingAddress: Shipping;
   @OneToMany(() => OrdersProducts, (op) => op.order, { cascade: true })
   products: OrdersProducts[];
-  
-//   @OneToOne(() => ShippingEntity, (ship) => ship.order, { cascade: true })
-//   @JoinColumn()
-//   shippingAddress: ShippingEntity;
 
-//   @OneToMany(() => OrdersProductsEntity, (op) => op.order, { cascade: true })
-//   products: OrdersProductsEntity[];
-
-//   @ManyToOne(() => UserEntity, (user) => user.orders)
-//   user: UserEntity;
+  @ManyToOne(() => User, (user) => user.orders)
+  user: User;
 }

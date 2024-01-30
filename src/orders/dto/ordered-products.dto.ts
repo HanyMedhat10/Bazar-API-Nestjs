@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNumber, IsPositive } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class OrderedProductsDto {
-    @IsNotEmpty()
+  @IsNotEmpty()
   id: number;
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()

@@ -37,4 +37,6 @@ export class User {
   reviews: Review[];
   @OneToMany(() => Order, (order) => order.updatedBy)
   ordersUpdateBy: Order[];
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

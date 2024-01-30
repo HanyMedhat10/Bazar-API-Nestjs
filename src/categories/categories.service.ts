@@ -23,7 +23,7 @@ export class CategoriesService {
     return await this.categoryRepository.save(category);
   }
   async currentUser(req): Promise<User> {
-    const id = await req.user.userId;
+    const id = await req.user.id;
     return await this.userRepository.findOneBy({ id });
   }
   async findAll(): Promise<Category[]> {

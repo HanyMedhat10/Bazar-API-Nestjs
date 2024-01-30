@@ -12,8 +12,8 @@ export class OrdersProducts {
   productQuantity: number;
   @ManyToOne(() => Order, (order) => order.products)
   order: Order;
-//   @ManyToOne(() => Product, (prod) => prod.products, { cascade: true })
-//   product: Product;
+  //   @ManyToOne(() => Product, (prod) => prod.products, { cascade: true })
+  //   product: Product;
 
   @ManyToOne(() => Product, (prod) => prod.products)
   product: Product;

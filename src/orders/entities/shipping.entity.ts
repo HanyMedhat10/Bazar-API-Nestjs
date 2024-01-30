@@ -14,7 +14,7 @@ export class Shipping {
   @Column()
   city: string;
   @Column()
-  postCose: string;
+  postCode: string;
   @Column()
   state: string;
   @Column()

@@ -35,16 +35,17 @@ export class UsersController {
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string): Promise<User> {
+  //   return this.usersService.findOne(+id);
+  // }
   @UseGuards(JwtAuthGuard, RoleGuard) //must using token in using this method (login)
   @Get('profile')
   profile(@Req() req, @Res() res) {
     // return res.status(HttpStatus.OK).json(req.user);
     const userJson = res.status(HttpStatus.OK).json(req.user);
-    const id = req.user.userId;
+    // console.log(req);
+    const id = req.user.id;
     console.log(id);
     return userJson;
   }
