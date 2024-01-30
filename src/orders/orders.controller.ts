@@ -3,11 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
-  Req,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -17,6 +16,8 @@ import { User } from 'src/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/users/jwt.guard';
 import { RoleGuard } from 'src/utility/common/role/role.guard';
 import { Order } from './entities/order.entity';
+import { Roles } from 'src/utility/common/roles/roles.decorator';
+import { UpdateOrderStatusDto } from './dto/update-order-status-dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -32,23 +33,33 @@ export class OrdersController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<Order[]> {
     return await this.ordersService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Order> {
     return await this.ordersService.findOne(+id);
   }
-
-  @Patch(':id')
+  // @Roles('admin')
+  @UseGuards(JwtAuthGuard, RoleGuard) //must using token in using this method (login) & return payload in request
+  @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateOrderDto: UpdateOrderDto,
-  ) {
-    return await this.ordersService.update(+id, updateOrderDto);
+    @Body() updateOrderStatusDto: UpdateOrderStatusDto,
+    @CurrentUser() currentUser: User,
+  ): Promise<Order> {
+    return await this.ordersService.update(
+      +id,
+      updateOrderStatusDto,
+      currentUser,
+    );
   }
-
+  @UseGuards(JwtAuthGuard, RoleGuard) //must using token in using this method (login) & return payload in request
+  @Put('cancel/:id')
+  async cancelled(@Param('id') id: string, @CurrentUser() currentUser: User) {
+    return await this.ordersService.cancelled(+id, currentUser);
+  }
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.ordersService.remove(+id);
