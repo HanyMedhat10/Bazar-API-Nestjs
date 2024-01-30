@@ -10,13 +10,11 @@ import {
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/users/jwt.guard';
 import { RoleGuard } from 'src/utility/common/role/role.guard';
 import { Order } from './entities/order.entity';
-import { Roles } from 'src/utility/common/roles/roles.decorator';
 import { UpdateOrderStatusDto } from './dto/update-order-status-dto';
 
 @Controller('orders')
@@ -57,7 +55,10 @@ export class OrdersController {
   }
   @UseGuards(JwtAuthGuard, RoleGuard) //must using token in using this method (login) & return payload in request
   @Put('cancel/:id')
-  async cancelled(@Param('id') id: string, @CurrentUser() currentUser: User) {
+  async cancelled(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: User,
+  ): Promise<Order> {
     return await this.ordersService.cancelled(+id, currentUser);
   }
   @Delete(':id')

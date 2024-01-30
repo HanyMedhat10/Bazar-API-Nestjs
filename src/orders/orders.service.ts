@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
@@ -57,7 +56,7 @@ export class OrdersService {
         createOrderDto.orderedProducts[i].productUnitPrice;
       opEntity.push({ order, product, productQuantity, productUnitPrice });
     }
-    const op = await this.ordersProductsRepository
+    await this.ordersProductsRepository
       .createQueryBuilder()
       .insert()
       .into(OrdersProducts)
@@ -91,7 +90,7 @@ export class OrdersService {
     id: number,
     updateOrderStatusDto: UpdateOrderStatusDto,
     currentUser: User,
-  ) {
+  ): Promise<Order> {
     let order = await this.findOne(id);
     if (!order) throw new NotFoundException('Order not found ');
     if (
@@ -126,7 +125,7 @@ export class OrdersService {
     }
     return order;
   }
-  async cancelled(id: number, currentUser: User) {
+  async cancelled(id: number, currentUser: User): Promise<Order> {
     let order = await this.findOne(id);
     if (!order) throw new NotFoundException('Order not fount');
     if (order.status === OrderStatus.CANCELLED) return order;
